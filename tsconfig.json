@@ -12,7 +12,8 @@
   },
   "rootDir": "lib/",
   "include": [
-    "lib/**/*.ts"
+    "lib/**/*.ts",
+    "index.ts"
   ],
   "exclude": [
     "node_modules"

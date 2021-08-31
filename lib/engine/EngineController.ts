@@ -7,7 +7,7 @@ import {
   Plugin,
 } from 'kuzzle';
 
-import { AbstractEngine } from '../services';
+import { AbstractEngine } from './AbstractEngine';
 
 export class EngineController {
   private engine: AbstractEngine;
