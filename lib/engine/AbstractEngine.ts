@@ -36,7 +36,7 @@ export abstract class AbstractEngine {
     this.configType = `engine-${this.pluginName}`;
   }
 
-  async init (): Promise<void> {
+  async init (...args): Promise<any> {
     // Can be used to inject other services into the engine
   }
   protected abstract onCreate (index: string, group: string): Promise<{ collections: string[] }>;

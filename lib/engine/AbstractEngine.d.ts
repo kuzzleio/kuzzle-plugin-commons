@@ -11,7 +11,7 @@ export declare abstract class AbstractEngine {
      * @param context Plugin context
      */
     constructor(pluginName: string, plugin: Plugin);
-    init(): Promise<void>;
+    init(...args: any[]): Promise<any>;
     protected abstract onCreate(index: string, group: string): Promise<{
         collections: string[];
     }>;
