@@ -8,10 +8,10 @@ node_modules/
 *~
 
 # Typescript related files
-app.js
-app.d.ts
-app.js.map
+# index.js
+# index.d.ts
+# index.js.map
 
-lib/**/*.d.ts
-lib/**/*.js.map
-lib/**/*.js
+# lib/**/*.d.ts
+# lib/**/*.js.map
+# lib/**/*.js
