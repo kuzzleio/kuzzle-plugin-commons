@@ -39,5 +39,5 @@ export declare abstract class AbstractEngine {
      */
     private createEngineIndex;
     protected engineId(index: string): string;
-    protected logError(engineIndex: string, message: string, error: Error): void;
+    protected logError(index: string, message: string, error: Error): void;
 }

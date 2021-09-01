@@ -136,11 +136,11 @@ export abstract class AbstractEngine {
   }
 
   protected engineId (index: string): string {
-    return `engine-scheduler--${index}`;
+    return `engine-${this.pluginName}--${index}`;
   }
 
-  protected logError (engineIndex: string, message: string, error: Error) {
-    this.context.log.error(`[${engineIndex}] ${message}: ${error}${error.stack}`);
+  protected logError (index: string, message: string, error: Error) {
+    this.context.log.error(`[${index}] ${message}: ${error}${error.stack}`);
   }
 
 }
