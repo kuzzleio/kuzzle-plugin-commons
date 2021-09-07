@@ -9,8 +9,7 @@ export declare class EngineController {
     get sdk(): EmbeddedSDK;
     /**
      * @param pluginName Used to define http routes
-     * @param config Plugin config
-     * @param context Plugin context
+     * @param plugin Plugin instance
      * @param engine Engine used
      */
     constructor(pluginName: string, plugin: Plugin, engine: AbstractEngine);

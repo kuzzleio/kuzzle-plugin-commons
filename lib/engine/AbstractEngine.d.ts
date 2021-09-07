@@ -7,8 +7,7 @@ export declare abstract class AbstractEngine {
     get sdk(): EmbeddedSDK;
     /**
      * @param pluginName Used to define http routes
-     * @param config Plugin config
-     * @param context Plugin context
+     * @param plugin Plugin instance
      */
     constructor(pluginName: string, plugin: Plugin);
     init(...args: any[]): Promise<any>;

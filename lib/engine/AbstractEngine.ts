@@ -22,8 +22,7 @@ export abstract class AbstractEngine {
 
   /**
    * @param pluginName Used to define http routes
-   * @param config Plugin config
-   * @param context Plugin context
+   * @param plugin Plugin instance
    */
   constructor (
     pluginName: string,

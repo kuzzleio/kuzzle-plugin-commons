@@ -24,8 +24,7 @@ export class EngineController {
 
   /**
    * @param pluginName Used to define http routes
-   * @param config Plugin config
-   * @param context Plugin context
+   * @param plugin Plugin instance
    * @param engine Engine used
    */
   constructor (
