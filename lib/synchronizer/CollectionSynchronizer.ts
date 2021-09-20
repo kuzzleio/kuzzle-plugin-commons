@@ -18,8 +18,8 @@ export abstract class CollectionSynchronizer<SrcDoc extends { _id: string, _sour
   private dstCollection: string;
   private enabled = false;
 
-  abstract convertId (srcDocument: SrcDoc): string;
-  abstract convertBody (srcDocument: SrcDoc): Promise<DstDocContent>;
+  abstract convertId (srcDocument: SrcDoc, request?: KuzzleRequest): string;
+  abstract convertBody (srcDocument: SrcDoc, request?: KuzzleRequest): Promise<DstDocContent>;
 
   constructor (app: Backend, srcCollection: string, dstCollection: string) {
     this.app = app;
@@ -97,7 +97,7 @@ export abstract class CollectionSynchronizer<SrcDoc extends { _id: string, _sour
     const filteredDocs = this.filter(docs);
 
     if (filteredDocs.length > 0) {
-      const ids = filteredDocs.map(doc => this.convertId(doc));
+      const ids = filteredDocs.map(doc => this.convertId(doc, request));
 
       await this.app.sdk.document.mDelete(
         request.getIndex(),
@@ -125,7 +125,7 @@ export abstract class CollectionSynchronizer<SrcDoc extends { _id: string, _sour
 
     const dstDocuments = await Promise.all(
       srcDocuments.map(doc => {
-        return this.convertBody(doc)
+        return this.convertBody(doc, request)
           .then((body: any) => {
             // Inject Kuzzle Metadata if not present
             if (! body._kuzzle_info) {
@@ -144,7 +144,7 @@ export abstract class CollectionSynchronizer<SrcDoc extends { _id: string, _sour
             }
 
             return {
-              _id: this.convertId(doc),
+              _id: this.convertId(doc, request),
               body
             };
           });

@@ -1,4 +1,4 @@
-import { Backend, JSONObject } from 'kuzzle';
+import { Backend, JSONObject, KuzzleRequest } from 'kuzzle';
 /**
  * This class allows to synchronize documents from one collection into an other.
  *
@@ -11,8 +11,8 @@ export declare abstract class CollectionSynchronizer<SrcDoc extends {
     private srcCollection;
     private dstCollection;
     private enabled;
-    abstract convertId(srcDocument: SrcDoc): string;
-    abstract convertBody(srcDocument: SrcDoc): Promise<DstDocContent>;
+    abstract convertId(srcDocument: SrcDoc, request?: KuzzleRequest): string;
+    abstract convertBody(srcDocument: SrcDoc, request?: KuzzleRequest): Promise<DstDocContent>;
     constructor(app: Backend, srcCollection: string, dstCollection: string);
     start(): void;
     stop(): void;
