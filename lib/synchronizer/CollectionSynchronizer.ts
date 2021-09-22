@@ -28,15 +28,15 @@ export abstract class CollectionSynchronizer<SrcDoc extends { _id: string, _sour
 
     this.app.pipe.register(
       'generic:document:afterWrite',
-      this.pipeAfterWrite.bind(this));
+      (documents, request) => this.pipeAfterWrite(documents, request));
 
     this.app.pipe.register(
       'generic:document:afterUpdate',
-      this.pipeAfterUpdate.bind(this));
+      (documents, request) => this.pipeAfterUpdate(documents, request));
 
     this.app.pipe.register(
       'generic:document:beforeDelete',
-      this.pipeBeforeDelete.bind(this));
+      (documents, request) => this.pipeBeforeDelete(documents, request));
   }
 
   start () {
