@@ -102,8 +102,7 @@ export abstract class CollectionSynchronizer<SrcDoc extends { _id: string, _sour
       await this.app.sdk.document.mDelete(
         request.getIndex(),
         this.dstCollection,
-        ids,
-        { strict: true });
+        ids);
 
       await this.afterDeleteDocuments(request.getIndex(), ids);
     }
