@@ -82,15 +82,18 @@ export abstract class AbstractEngine {
 
     this.context.log.debug(`Delete ${this.pluginName} engine on index "${index}"`);
 
-    const { collections } = await this.onDelete(index);
+    try {
+      const { collections } = await this.onDelete(index);
 
-    await this.sdk.document.delete(
-      this.config.adminIndex,
-      this.config.configCollection,
-      this.engineId(index),
-      { refresh: 'wait_for' });
-
-    return { collections };
+      return { collections };
+    }
+    finally {
+      await this.sdk.document.delete(
+        this.config.adminIndex,
+        this.config.configCollection,
+        this.engineId(index),
+        { refresh: 'wait_for' });
+    }
   }
 
   async list (): Promise<Array<{ index: string }>> {
