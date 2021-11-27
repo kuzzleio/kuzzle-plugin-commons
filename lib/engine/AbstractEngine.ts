@@ -1,7 +1,6 @@
 import {
   PluginContext,
   EmbeddedSDK,
-  JSONObject,
   BadRequestError,
   NotFoundError,
   Mutex,
@@ -9,9 +8,9 @@ import {
   Plugin,
 } from 'kuzzle';
 
-export abstract class AbstractEngine {
+export abstract class AbstractEngine<TPlugin extends Plugin> {
   protected context: PluginContext;
-  protected config: JSONObject;
+  protected config: TPlugin['config'];
   protected pluginName: string;
 
   protected adminIndex: string;
