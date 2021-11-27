@@ -14,7 +14,10 @@ export abstract class AbstractEngine {
   protected config: JSONObject;
   protected pluginName: string;
 
-  configType: string;
+  protected adminIndex: string;
+  protected adminConfigCollection: string;
+
+  public configType: string;
 
   get sdk (): EmbeddedSDK {
     return this.context.accessors.sdk;
@@ -27,10 +30,15 @@ export abstract class AbstractEngine {
   constructor (
     pluginName: string,
     plugin: Plugin,
+    adminIndex: string,
+    adminConfigCollection: string,
   ) {
     this.pluginName = pluginName;
     this.config = plugin.config;
     this.context = plugin.context;
+
+    this.adminIndex = adminIndex;
+    this.adminConfigCollection = adminConfigCollection;
 
     this.configType = `engine-${this.pluginName}`;
   }
@@ -54,8 +62,8 @@ export abstract class AbstractEngine {
     const { collections } = await this.onCreate(index, group);
 
     await this.sdk.document.create(
-      this.config.adminIndex,
-      this.config.configCollection,
+      this.adminIndex,
+      this.adminConfigCollection,
       { type: this.configType, engine: { index, group } },
       this.engineId(index),
       { refresh: 'wait_for' });
@@ -89,8 +97,8 @@ export abstract class AbstractEngine {
     }
     finally {
       await this.sdk.document.delete(
-        this.config.adminIndex,
-        this.config.configCollection,
+        this.adminIndex,
+        this.adminConfigCollection,
         this.engineId(index),
         { refresh: 'wait_for' });
     }
@@ -98,8 +106,8 @@ export abstract class AbstractEngine {
 
   async list (): Promise<Array<{ index: string }>> {
     const result = await this.sdk.document.search(
-      this.config.adminIndex,
-      this.config.configCollection,
+      this.adminIndex,
+      this.adminConfigCollection,
       {
         query: {
           equals: { type: this.configType },
@@ -112,8 +120,8 @@ export abstract class AbstractEngine {
 
   async exists (index: string): Promise<boolean> {
     const exists = await this.sdk.document.exists(
-      this.config.adminIndex,
-      this.config.configCollection,
+      this.adminIndex,
+      this.adminConfigCollection,
       this.engineId(index));
 
     return exists;

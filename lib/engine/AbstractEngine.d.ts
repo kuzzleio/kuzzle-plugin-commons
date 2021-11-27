@@ -3,13 +3,15 @@ export declare abstract class AbstractEngine {
     protected context: PluginContext;
     protected config: JSONObject;
     protected pluginName: string;
+    protected adminIndex: string;
+    protected adminConfigCollection: string;
     configType: string;
     get sdk(): EmbeddedSDK;
     /**
      * @param pluginName Used to define http routes
      * @param plugin Plugin instance
      */
-    constructor(pluginName: string, plugin: Plugin);
+    constructor(pluginName: string, plugin: Plugin, adminIndex: string, adminConfigCollection: string);
     init(...args: any[]): Promise<any>;
     protected abstract onCreate(index: string, group: string): Promise<{
         collections: string[];
