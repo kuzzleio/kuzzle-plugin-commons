@@ -1,7 +1,7 @@
-import { PluginContext, EmbeddedSDK, JSONObject, Plugin } from 'kuzzle';
-export declare abstract class AbstractEngine {
+import { PluginContext, EmbeddedSDK, Plugin } from 'kuzzle';
+export declare abstract class AbstractEngine<TPlugin extends Plugin> {
     protected context: PluginContext;
-    protected config: JSONObject;
+    protected config: TPlugin['config'];
     protected pluginName: string;
     protected adminIndex: string;
     protected adminConfigCollection: string;

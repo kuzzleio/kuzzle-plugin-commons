@@ -9,10 +9,10 @@ import {
 
 import { AbstractEngine } from './AbstractEngine';
 
-export class EngineController {
-  private engine: AbstractEngine;
+export class EngineController<TPlugin extends Plugin> {
+  private engine: AbstractEngine<TPlugin>;
   private context: PluginContext;
-  private config: JSONObject;
+  private config: TPlugin['config'];
 
   private pluginName: string;
 
@@ -30,7 +30,7 @@ export class EngineController {
   constructor (
     pluginName: string,
     plugin: Plugin,
-    engine: AbstractEngine
+    engine: AbstractEngine<TPlugin>
   ) {
     this.pluginName = pluginName;
     this.config = plugin.config;
