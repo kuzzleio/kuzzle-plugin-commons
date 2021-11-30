@@ -8,9 +8,19 @@ If you are interested by having a stable version of the classes contained in thi
 
 ## Engine
 
+Works with engines that can be setup on indexes to bring a new set of feature to specifics indexes
+
   - `AbstractEngine`
   - `EngineController`
 
 ## Synchronizer
 
+Automaticaly synchronize documents from one collection to another
+
   - `CollectionSynchronizer`
+
+## Crud
+
+Base controller to have CRUD action on a specific collection
+
+- `CRUDController`
