@@ -24,3 +24,7 @@ Automaticaly synchronize documents from one collection to another
 Base controller to have CRUD action on a specific collection
 
 - `CRUDController`
+
+## ConfigManager
+
+Class to register config documents and create asociated collection with proper mappings
