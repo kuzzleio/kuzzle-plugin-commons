@@ -10,12 +10,35 @@ export type ConfigManagerOptions = {
   collection?: string,
 
   /**
+   * Function that take the config document content as a parameter and return
+   * a kebab-case string to uniquely identify it.
    *
+   * By default it will use the "name" property of config content.
    */
   idGenerator?: (content: JSONObject) => string,
-};
 
-const defaultIdGenerator = content => Inflector.kebabCase(content.name);
+  /**
+   * Additional mappings that will be merged
+   *
+   * @default
+   * {
+   *    dynamic: 'strict',
+   *    properties: {
+   *      type: { type: 'keyword' },
+   *      group: { type: 'keyword' },
+   *    }
+   * }
+   */
+  mappings?: JSONObject;
+
+  /**
+   * Config collection settings
+   *
+   * @default
+   * {}
+   */
+  settings?: JSONObject;
+};
 
 /**
  * Manage config documents type.
@@ -24,7 +47,8 @@ const defaultIdGenerator = content => Inflector.kebabCase(content.name);
  * create the associated collection to store config documents.
  */
 export class ConfigManager {
-  public baseMappings = {
+  public readonly collection: string = 'collection';
+  public baseMappings: JSONObject = {
     dynamic: 'strict',
     properties: {
       type: { type: 'keyword' },
@@ -32,9 +56,9 @@ export class ConfigManager {
       group: { type: 'keyword' },
     }
   };
+  public baseSettings: JSONObject = {};
 
-  private collection: string;
-  private idGenerator: (content: JSONObject) => string;
+  private idGenerator: (content: JSONObject) => string = content => Inflector.kebabCase(content.name);
   private context: PluginContext;
   private config: Plugin['config'];
   private configurations = new Map<string, JSONObject>();
@@ -46,8 +70,11 @@ export class ConfigManager {
   constructor (plugin: Plugin, options: ConfigManagerOptions = {}) {
     this.context = plugin.context;
     this.config = plugin.config;
-    this.collection = options.collection || 'config';
-    this.idGenerator = options.idGenerator || defaultIdGenerator;
+
+    this.collection = options.collection || this.collection;
+    this.idGenerator = options.idGenerator || this.idGenerator;
+    this.baseMappings = options.mappings ? _.merge({}, this.baseMappings, options.mappings) : this.baseMappings;
+    this.baseSettings = options.settings || this.baseSettings;
 
     this.registerPipe(plugin);
   }
@@ -77,14 +104,16 @@ export class ConfigManager {
    */
   async createCollection (index: string, mappingsOverride: JSONObject = {}, settingsOverride: JSONObject = {}) {
     const fullMappings = _.merge({}, this.baseMappings, mappingsOverride);
+    const fullSettings = _.merge({}, this.baseSettings, settingsOverride);
 
     for (const [type, mappings] of this.configurations.entries()) {
+      console.log({type, mappings})
       fullMappings.properties[type] = mappings;
     }
 
     await this.sdk.collection.create(index, this.collection, {
       mappings: fullMappings as any,
-      settings: settingsOverride,
+      settings: fullSettings,
     });
   }
 
