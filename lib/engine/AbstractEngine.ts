@@ -6,6 +6,7 @@ import {
   Mutex,
   Inflector,
   Plugin,
+  JSONObject,
 } from 'kuzzle';
 
 export abstract class AbstractEngine<TPlugin extends Plugin> {
@@ -63,7 +64,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     await this.sdk.document.create(
       this.adminIndex,
       this.adminConfigCollection,
-      { type: this.configType, engine: { index, group } },
+      { type: this.configType, group, engine: { index } },
       this.engineId(index),
       { refresh: 'wait_for' });
 
@@ -103,15 +104,21 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     }
   }
 
-  async list (): Promise<Array<{ index: string }>> {
+  async list (group?: string): Promise<Array<{ index: string }>> {
+    const query: JSONObject = {
+      and: [
+        { equals: { type: this.configType } },
+      ],
+    };
+
+    if (group) {
+      query.and.push({ equals: { group } });
+    }
+
     const result = await this.sdk.document.search(
       this.adminIndex,
       this.adminConfigCollection,
-      {
-        query: {
-          equals: { type: this.configType },
-        },
-      },
+      { query },
       { size: 1000, lang: 'koncorde' });
 
     return result.hits.map(hit => hit._source.engine);
