@@ -107,7 +107,6 @@ export class ConfigManager {
     const fullSettings = _.merge({}, this.baseSettings, settingsOverride);
 
     for (const [type, mappings] of this.configurations.entries()) {
-      console.log({type, mappings})
       fullMappings.properties[type] = mappings;
     }
 
