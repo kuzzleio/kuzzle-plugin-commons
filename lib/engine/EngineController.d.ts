@@ -26,9 +26,7 @@ export declare class EngineController<TPlugin extends Plugin> {
         collections: string[];
     }>;
     list(): Promise<{
-        engines: {
-            index: string;
-        }[];
+        engines: import("./EngineContent").EngineContent[];
     }>;
     exists(request: KuzzleRequest): Promise<{
         exists: boolean;
