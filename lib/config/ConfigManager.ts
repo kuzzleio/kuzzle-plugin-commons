@@ -47,7 +47,16 @@ export type ConfigManagerOptions = {
  * create the associated collection to store config documents.
  */
 export class ConfigManager {
-  public readonly collection: string = 'collection';
+  /**
+   * Name of the config collection
+   *
+   * @default "config"
+   */
+  public readonly collection: string = 'config';
+
+  /**
+   * Base mappings for the config collection
+   */
   public baseMappings: JSONObject = {
     dynamic: 'strict',
     properties: {
@@ -56,6 +65,10 @@ export class ConfigManager {
       group: { type: 'keyword' },
     }
   };
+
+  /**
+   * Base settings for the config collection
+   */
   public baseSettings: JSONObject = {};
 
   private idGenerator: (content: JSONObject) => string = content => Inflector.kebabCase(content.name);

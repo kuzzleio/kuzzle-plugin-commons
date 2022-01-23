@@ -41,8 +41,19 @@ export declare type ConfigManagerOptions = {
  * create the associated collection to store config documents.
  */
 export declare class ConfigManager {
+    /**
+     * Name of the config collection
+     *
+     * @default "config"
+     */
     readonly collection: string;
+    /**
+     * Base mappings for the config collection
+     */
     baseMappings: JSONObject;
+    /**
+     * Base settings for the config collection
+     */
     baseSettings: JSONObject;
     private idGenerator;
     private context;
