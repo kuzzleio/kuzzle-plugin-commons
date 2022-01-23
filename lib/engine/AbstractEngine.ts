@@ -30,7 +30,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
    * @param pluginName Used to define http routes
    * @param plugin Plugin instance
    * @param index Name of admin index to store engine documents
-   * @param adminConfigManager ConfigManager instance for admin index to register engine mappings
+   * @param adminConfigManager ConfigManager instance for admin index
    * @param engineConfigManager ConfigManager instance for engine index to create config collection
    */
   constructor (
@@ -48,14 +48,6 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     this.engineConfigManager = engineConfigManager;
 
     this.configType = `engine-${this.pluginName}`;
-
-    this.adminConfigManager.register('engine', {
-      properties: {
-        index: { type: 'keyword' },
-        group: { type: 'keyword' },
-        name: { type: 'keyword' },
-      }
-    });
   }
 
   async init (...args): Promise<any> {

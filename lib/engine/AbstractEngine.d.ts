@@ -14,7 +14,7 @@ export declare abstract class AbstractEngine<TPlugin extends Plugin> {
      * @param pluginName Used to define http routes
      * @param plugin Plugin instance
      * @param index Name of admin index to store engine documents
-     * @param adminConfigManager ConfigManager instance for admin index to register engine mappings
+     * @param adminConfigManager ConfigManager instance for admin index
      * @param engineConfigManager ConfigManager instance for engine index to create config collection
      */
     constructor(pluginName: string, plugin: Plugin, adminIndex: string, adminConfigManager: ConfigManager, engineConfigManager: ConfigManager);

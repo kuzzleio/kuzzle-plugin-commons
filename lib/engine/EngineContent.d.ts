@@ -11,7 +11,7 @@ export declare type EngineContent = {
      */
     group: string;
     /**
-     * Plugin name
+     * Engine name
      */
     name: string;
 };
