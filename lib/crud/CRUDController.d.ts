@@ -1,11 +1,13 @@
-import { KuzzleRequest, PluginContext, JSONObject, ControllerDefinition, Plugin } from 'kuzzle';
+import { KuzzleRequest, PluginContext, JSONObject, ControllerDefinition, Plugin, EmbeddedSDK } from 'kuzzle';
 export declare class CRUDController {
     protected context: PluginContext;
     protected config: JSONObject;
-    private collection;
+    protected collection: string;
     definition: ControllerDefinition;
     constructor(plugin: Plugin, collection: string);
-    get as(): (user: any) => import("kuzzle").EmbeddedSDK;
+    protected get as(): (user: {
+        _id: string;
+    }) => EmbeddedSDK;
     /**
      * Create an asset or a device depending on the collection.
      *

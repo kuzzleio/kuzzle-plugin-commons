@@ -4,12 +4,14 @@ import {
   JSONObject,
   ControllerDefinition,
   Plugin,
+  EmbeddedSDK,
 } from 'kuzzle';
 
 export class CRUDController {
   protected context: PluginContext;
   protected config: JSONObject;
-  private collection: string;
+  protected collection: string;
+
   public definition: ControllerDefinition;
 
   constructor (plugin: Plugin, collection: string) {
@@ -18,7 +20,7 @@ export class CRUDController {
     this.collection = collection;
       }
 
-  get as () {
+  protected get as (): (user: { _id: string }) => EmbeddedSDK {
     return user => this.context.accessors.sdk.as(user, { checkRights: true });
   }
 
