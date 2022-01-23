@@ -138,7 +138,7 @@ export class ConfigManager {
    */
   private async generateID (documents: Document[], request: KuzzleRequest) {
     if (request.getCollection() !== this.collection) {
-      return request;
+      return documents;
     }
 
     for (const document of documents) {
