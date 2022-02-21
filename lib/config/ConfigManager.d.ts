@@ -1,4 +1,4 @@
-import { JSONObject, Plugin } from 'kuzzle';
+import { JSONObject, Plugin, Backend } from 'kuzzle';
 export declare type ConfigManagerOptions = {
     /**
      * Name of the config collection
@@ -56,11 +56,13 @@ export declare class ConfigManager {
      */
     baseSettings: JSONObject;
     private idGenerator;
-    private context;
-    private config;
+    private appOrPlugin;
     private configurations;
     private get sdk();
-    constructor(plugin: Plugin, options?: ConfigManagerOptions);
+    private get app();
+    private get plugin();
+    private get isApp();
+    constructor(appOrPlugin: Backend | Plugin, options?: ConfigManagerOptions);
     /**
      * Register a new config document type
      *
@@ -78,6 +80,7 @@ export declare class ConfigManager {
      * Creates the config collection and apply mappings on the specified index.
      */
     createCollection(index: string, mappingsOverride?: JSONObject, settingsOverride?: JSONObject): Promise<void>;
+    get mappings(): any;
     /**
      * Pipe to generate specific IDs for config documents
      *
