@@ -100,7 +100,7 @@ export class ConfigManager {
   }
 
   private get isApp () {
-    return this.appOrPlugin.constructor.name === 'Backend';
+    return this.appOrPlugin instanceof Backend;
   }
 
   constructor (appOrPlugin: Backend | Plugin, options: ConfigManagerOptions = {}) {
