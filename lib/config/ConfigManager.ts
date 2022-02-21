@@ -192,16 +192,17 @@ export class ConfigManager {
 
   private registerPipe () {
     if (this.isApp) {
-      const beforeWritePipes = this.plugin.pipes['generic:document:beforeWrite'] as EventHandler[];
-
-      if (! _.isArray(this.plugin.pipes['generic:document:beforeWrite'])) {
-        throw new PluginImplementationError('Handler on "generic:document:beforeWrite" must be an array');
-      }
-
-      beforeWritePipes.push(this.generateID.bind(this));
-    }
-    else {
       this.app.pipe.register('generic:document:beforeWrite', this.generateID.bind(this));
+
+      return;
     }
+
+    const beforeWritePipes = this.plugin.pipes['generic:document:beforeWrite'] as EventHandler[];
+
+    if (! _.isArray(this.plugin.pipes['generic:document:beforeWrite'])) {
+      throw new PluginImplementationError('Handler on "generic:document:beforeWrite" must be an array');
+    }
+
+    beforeWritePipes.push(this.generateID.bind(this));
   }
 }
