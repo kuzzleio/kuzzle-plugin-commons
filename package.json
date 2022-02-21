@@ -1,6 +1,6 @@
 {
   "name": "kuzzle-plugin-commons",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "Common classes for developping Kuzzle plugins",
   "main": "index.js",
   "scripts": {
