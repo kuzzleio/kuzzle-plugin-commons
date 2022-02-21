@@ -151,6 +151,16 @@ export class ConfigManager {
     });
   }
 
+  get mappings () {
+    const fullMappings = _.merge({}, this.baseMappings);
+
+    for (const [type, mappings] of this.configurations.entries()) {
+      fullMappings.properties[type] = mappings;
+    }
+
+    return fullMappings;
+  }
+
   // @todo search with custom search result
 
   /**
