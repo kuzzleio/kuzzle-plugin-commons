@@ -21,7 +21,13 @@ export class CRUDController {
       }
 
   protected get as (): (user: { _id: string }) => EmbeddedSDK {
-    return user => this.context.accessors.sdk.as(user, { checkRights: true });
+    return user => {
+      if (user === null) {
+        return this.context.accessors.sdk;
+      }
+
+      return this.context.accessors.sdk.as(user, { checkRights: true });
+    };
   }
 
   /**
