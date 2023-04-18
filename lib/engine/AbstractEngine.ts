@@ -6,7 +6,7 @@ import {
   Mutex,
   Inflector,
   Plugin,
-  JSONObject,
+  JSONObject, KuzzleRequest,
 } from 'kuzzle';
 
 import { ConfigManager } from '../config';
@@ -53,11 +53,11 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
   async init (...args): Promise<any> {
     // Can be used to inject other services into the engine
   }
-  protected abstract onCreate (index: string, group: string): Promise<{ collections: string[] }>;
-  protected abstract onUpdate (index: string, group: string): Promise<{ collections: string[] }>;
-  protected abstract onDelete (index: string): Promise<{ collections: string[] }>;
+  protected abstract onCreate (index: string, group: string, request?: KuzzleRequest): Promise<{ collections: string[] }>;
+  protected abstract onUpdate (index: string, group: string, request?: KuzzleRequest): Promise<{ collections: string[] }>;
+  protected abstract onDelete (index: string, request?: KuzzleRequest): Promise<{ collections: string[] }>;
 
-  async create (index: string, group = 'commons'): Promise<{ collections: string[] }> {
+  async create (index: string, group = 'commons', request?: KuzzleRequest): Promise<{ collections: string[] }> {
     if (await this.exists(index)) {
       throw new BadRequestError(`${Inflector.upFirst(this.pluginName)} engine on index "${index}" already exists`);
     }
@@ -67,7 +67,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     await this.createEngineIndex(index);
     await this.engineConfigManager.createCollection(index);
 
-    const { collections } = await this.onCreate(index, group);
+    const { collections } = await this.onCreate(index, group, request);
 
     await this.sdk.document.create(
       this.adminIndex,
@@ -79,7 +79,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     return { collections };
   }
 
-  async update (index: string, group = 'commons'): Promise<{ collections: string[] }> {
+  async update (index: string, group = 'commons', request?: KuzzleRequest): Promise<{ collections: string[] }> {
     if (! await this.exists(index)) {
       throw new NotFoundError(`${Inflector.upFirst(this.pluginName)} engine on index "${index}" does not exists`);
     }
@@ -88,12 +88,12 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
 
     await this.engineConfigManager.createCollection(index);
 
-    const { collections } = await this.onUpdate(index, group);
+    const { collections } = await this.onUpdate(index, group, request);
 
     return { collections };
   }
 
-  async delete (index: string): Promise<{ collections: string[] }> {
+  async delete (index: string, request?: KuzzleRequest): Promise<{ collections: string[] }> {
     if (! await this.exists(index)) {
       throw new NotFoundError(`${Inflector.upFirst(this.pluginName)} engine on index "${index}" does not exists`);
     }
@@ -101,7 +101,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     this.context.log.info(`Delete ${this.pluginName} engine on index "${index}"`);
 
     try {
-      const { collections } = await this.onDelete(index);
+      const { collections } = await this.onDelete(index, request);
 
       return { collections };
     }
