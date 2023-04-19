@@ -25,5 +25,11 @@
   },
   "peerDependencies": {
     "kuzzle": "^2.14.0"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }

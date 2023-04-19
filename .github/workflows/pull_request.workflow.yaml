@@ -1,0 +1,11 @@
+name: Pull request
+
+on:
+  pull_request:
+
+jobs:
+  tests_lint:
+    name: Lint
+    uses: ./.github/workflows/tests_lint.yaml
+    secrets: inherit
+
