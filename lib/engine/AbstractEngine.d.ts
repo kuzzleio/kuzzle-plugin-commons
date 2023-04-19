@@ -1,4 +1,4 @@
-import { PluginContext, EmbeddedSDK, Plugin } from 'kuzzle';
+import { PluginContext, EmbeddedSDK, Plugin, KuzzleRequest } from 'kuzzle';
 import { ConfigManager } from '../config';
 import { EngineContent } from './EngineContent';
 export declare abstract class AbstractEngine<TPlugin extends Plugin> {
@@ -19,22 +19,22 @@ export declare abstract class AbstractEngine<TPlugin extends Plugin> {
      */
     constructor(pluginName: string, plugin: Plugin, adminIndex: string, adminConfigManager: ConfigManager, engineConfigManager: ConfigManager);
     init(...args: any[]): Promise<any>;
-    protected abstract onCreate(index: string, group: string): Promise<{
+    protected abstract onCreate(index: string, group: string, request?: KuzzleRequest): Promise<{
         collections: string[];
     }>;
-    protected abstract onUpdate(index: string, group: string): Promise<{
+    protected abstract onUpdate(index: string, group: string, request?: KuzzleRequest): Promise<{
         collections: string[];
     }>;
-    protected abstract onDelete(index: string): Promise<{
+    protected abstract onDelete(index: string, request?: KuzzleRequest): Promise<{
         collections: string[];
     }>;
-    create(index: string, group?: string): Promise<{
+    create(index: string, group?: string, request?: KuzzleRequest): Promise<{
         collections: string[];
     }>;
-    update(index: string, group?: string): Promise<{
+    update(index: string, group?: string, request?: KuzzleRequest): Promise<{
         collections: string[];
     }>;
-    delete(index: string): Promise<{
+    delete(index: string, request?: KuzzleRequest): Promise<{
         collections: string[];
     }>;
     list(group?: string): Promise<Array<EngineContent>>;

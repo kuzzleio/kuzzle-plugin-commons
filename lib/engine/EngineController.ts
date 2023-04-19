@@ -73,7 +73,7 @@ export class EngineController<TPlugin extends Plugin> {
     const index = request.getIndex();
     const group = request.getString('group', 'commons');
 
-    const { collections } = await this.engine.create(index, group);
+    const { collections } = await this.engine.create(index, group, request);
 
     return { index, collections };
   }
@@ -82,7 +82,7 @@ export class EngineController<TPlugin extends Plugin> {
     const index = request.getIndex();
     const group = request.getString('group', 'commons');
 
-    const { collections } = await this.engine.update(index, group);
+    const { collections } = await this.engine.update(index, group, request);
 
     return { index, collections };
   }
@@ -90,7 +90,7 @@ export class EngineController<TPlugin extends Plugin> {
   async delete (request: KuzzleRequest) {
     const index = request.getIndex();
 
-    const { collections } = await this.engine.delete(index);
+    const { collections } = await this.engine.delete(index, request);
 
     return { index, collections };
   }
