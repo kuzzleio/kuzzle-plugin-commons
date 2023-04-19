@@ -10,19 +10,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Install nodejs version 16
         uses: actions/setup-node@v3
         with:
           node-version: 16
-
-      - name: Connect to github npm registry
-        uses: ./.github/actions/registry-auth
-        with:
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
       - name: Lint project
         run: |
