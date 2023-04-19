@@ -2,15 +2,24 @@
   "name": "kuzzle-plugin-commons",
   "version": "1.0.6",
   "description": "Common classes for developping Kuzzle plugins",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc --build tsconfig.json",
-    "package:create": "npm run build && npm pack"
-  },
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "license": "Apache 2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kuzzleio/kuzzle-plugin-commons"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "package:create": "npm run build && npm pack",
+    "test:lint": "eslint ./lib --ext .ts --config .eslintrc.json",
+    "test:lint:fix": "npm run test:lint -- --fix",
+    "test:types": "tsc --noEmit"
+  },
   "devDependencies": {
     "@types/node": "^18.15.11",
+    "eslint-plugin-kuzzle": "^0.0.6",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },

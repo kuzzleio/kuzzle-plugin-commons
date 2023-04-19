@@ -1,0 +1,16 @@
+# JS generated files from TS
+app.js
+app.d.ts
+app.js.map
+lib/**/*.d.ts
+lib/**/*.js.map
+lib/**/*.js
+tests/**/*.d.ts
+tests/**/*.js.map
+tests/**/*.js
+index.d.ts
+index.js
+index.js.map
+
+# Anything in the dist directory
+dist/

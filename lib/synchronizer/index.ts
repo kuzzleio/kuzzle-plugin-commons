@@ -1,1 +1,1 @@
-export * from './CollectionSynchronizer';
+export * from "./CollectionSynchronizer";

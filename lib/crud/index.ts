@@ -1,1 +1,1 @@
-export * from './CRUDController';
+export * from "./CRUDController";

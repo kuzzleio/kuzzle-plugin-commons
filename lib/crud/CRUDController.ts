@@ -5,7 +5,7 @@ import {
   ControllerDefinition,
   Plugin,
   EmbeddedSDK,
-} from 'kuzzle';
+} from "kuzzle";
 
 export class CRUDController {
   protected context: PluginContext;
@@ -14,14 +14,14 @@ export class CRUDController {
 
   public definition: ControllerDefinition;
 
-  constructor (plugin: Plugin, collection: string) {
+  constructor(plugin: Plugin, collection: string) {
     this.config = plugin.config;
     this.context = plugin.context;
     this.collection = collection;
-      }
+  }
 
-  protected get as (): (user: { _id: string }) => EmbeddedSDK {
-    return user => {
+  protected get as(): (user: { _id: string }) => EmbeddedSDK {
+    return (user) => {
       if (user === null) {
         return this.context.accessors.sdk;
       }
@@ -35,7 +35,7 @@ export class CRUDController {
    *
    * @param request
    */
-  async create (request: KuzzleRequest) {
+  async create(request: KuzzleRequest) {
     const index = request.getIndex();
     const asset = request.getBody();
     const id = request.input.resource._id;
@@ -45,7 +45,8 @@ export class CRUDController {
       this.collection,
       asset,
       id,
-      { ...request.input.args });
+      { ...request.input.args }
+    );
   }
 
   /**
@@ -53,7 +54,7 @@ export class CRUDController {
    *
    * @param request
    */
-  async delete (request: KuzzleRequest) {
+  async delete(request: KuzzleRequest) {
     const index = request.getIndex();
     const id = request.getId();
 
@@ -61,7 +62,8 @@ export class CRUDController {
       index,
       this.collection,
       id,
-      { ...request.input.args });
+      { ...request.input.args }
+    );
   }
 
   /**
@@ -69,22 +71,20 @@ export class CRUDController {
    *
    * @param request
    */
-  async search (request: KuzzleRequest) {
+  async search(request: KuzzleRequest) {
     const index = request.getIndex();
     const { searchBody } = request.getSearchParams();
 
-    const res = await this.as(request.context.user).query(
-      {
-        controller: 'document',
-        action: 'search',
-        index,
-        collection: this.collection,
-        body: searchBody,
-        ...request.input.args
-      }
-    );
+    const res = await this.as(request.context.user).query({
+      action: "search",
+      body: searchBody,
+      collection: this.collection,
+      controller: "document",
+      index,
+      ...request.input.args,
+    });
 
-    return res.result
+    return res.result;
   }
 
   /**
@@ -92,7 +92,7 @@ export class CRUDController {
    *
    * @param request
    */
-  async update (request: KuzzleRequest) {
+  async update(request: KuzzleRequest) {
     const index = request.getIndex();
     const body = request.getBody();
     const id = request.getId();
@@ -102,6 +102,7 @@ export class CRUDController {
       this.collection,
       id,
       body,
-      { ...request.input.args });
+      { ...request.input.args }
+    );
   }
 }
