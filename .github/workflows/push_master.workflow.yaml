@@ -1,0 +1,55 @@
+name: Push to master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tests_lint:
+    name: Lint
+    uses: ./.github/workflows/tests_lint.yaml
+    secrets: inherit
+
+  npm-deploy:
+    name: Publish Package to NPM.js
+    runs-on: ubuntu-22.04
+    needs: [functional-tests]
+    steps:
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          name: id_rsa
+          known_hosts: unnecessary
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.npm
+            **/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install nodejs version 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Publish to NPM
+        run: |
+          npm install
+          npm run build
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

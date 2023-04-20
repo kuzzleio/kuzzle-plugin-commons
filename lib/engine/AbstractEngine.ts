@@ -6,15 +6,16 @@ import {
   Mutex,
   Inflector,
   Plugin,
-  JSONObject, KuzzleRequest,
-} from 'kuzzle';
+  JSONObject,
+  KuzzleRequest,
+} from "kuzzle";
 
-import { ConfigManager } from '../config';
-import { EngineContent } from './EngineContent';
+import { ConfigManager } from "../config";
+import { EngineContent } from "./EngineContent";
 
 export abstract class AbstractEngine<TPlugin extends Plugin> {
   protected context: PluginContext;
-  protected config: TPlugin['config'];
+  protected config: TPlugin["config"];
   protected pluginName: string;
   protected adminIndex: string;
   protected adminConfigManager: ConfigManager;
@@ -22,7 +23,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
 
   public configType: string;
 
-  get sdk (): EmbeddedSDK {
+  get sdk(): EmbeddedSDK {
     return this.context.accessors.sdk;
   }
 
@@ -33,12 +34,12 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
    * @param adminConfigManager ConfigManager instance for admin index
    * @param engineConfigManager ConfigManager instance for engine index to create config collection
    */
-  constructor (
+  constructor(
     pluginName: string,
     plugin: Plugin,
     adminIndex: string,
     adminConfigManager: ConfigManager,
-    engineConfigManager: ConfigManager,
+    engineConfigManager: ConfigManager
   ) {
     this.pluginName = pluginName;
     this.config = plugin.config;
@@ -50,19 +51,40 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     this.configType = `engine-${this.pluginName}`;
   }
 
-  async init (...args): Promise<any> {
+  async init(): Promise<any> {
     // Can be used to inject other services into the engine
   }
-  protected abstract onCreate (index: string, group: string, request?: KuzzleRequest): Promise<{ collections: string[] }>;
-  protected abstract onUpdate (index: string, group: string, request?: KuzzleRequest): Promise<{ collections: string[] }>;
-  protected abstract onDelete (index: string, request?: KuzzleRequest): Promise<{ collections: string[] }>;
+  protected abstract onCreate(
+    index: string,
+    group: string,
+    request?: KuzzleRequest
+  ): Promise<{ collections: string[] }>;
+  protected abstract onUpdate(
+    index: string,
+    group: string,
+    request?: KuzzleRequest
+  ): Promise<{ collections: string[] }>;
+  protected abstract onDelete(
+    index: string,
+    request?: KuzzleRequest
+  ): Promise<{ collections: string[] }>;
 
-  async create (index: string, group = 'commons', request?: KuzzleRequest): Promise<{ collections: string[] }> {
+  async create(
+    index: string,
+    group = "commons",
+    request?: KuzzleRequest
+  ): Promise<{ collections: string[] }> {
     if (await this.exists(index)) {
-      throw new BadRequestError(`${Inflector.upFirst(this.pluginName)} engine on index "${index}" already exists`);
+      throw new BadRequestError(
+        `${Inflector.upFirst(
+          this.pluginName
+        )} engine on index "${index}" already exists`
+      );
     }
 
-    this.context.log.info(`Create ${this.pluginName} engine on index "${index}"`);
+    this.context.log.info(
+      `Create ${this.pluginName} engine on index "${index}"`
+    );
 
     await this.createEngineIndex(index);
     await this.engineConfigManager.createCollection(index);
@@ -72,19 +94,33 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     await this.sdk.document.create(
       this.adminIndex,
       this.adminConfigManager.collection,
-      { type: this.configType, engine: { index, group, name: this.pluginName } },
+      {
+        engine: { group, index, name: this.pluginName },
+        type: this.configType,
+      },
       this.engineId(index),
-      { refresh: 'wait_for' });
+      { refresh: "wait_for" }
+    );
 
     return { collections };
   }
 
-  async update (index: string, group = 'commons', request?: KuzzleRequest): Promise<{ collections: string[] }> {
-    if (! await this.exists(index)) {
-      throw new NotFoundError(`${Inflector.upFirst(this.pluginName)} engine on index "${index}" does not exists`);
+  async update(
+    index: string,
+    group = "commons",
+    request?: KuzzleRequest
+  ): Promise<{ collections: string[] }> {
+    if (!(await this.exists(index))) {
+      throw new NotFoundError(
+        `${Inflector.upFirst(
+          this.pluginName
+        )} engine on index "${index}" does not exists`
+      );
     }
 
-    this.context.log.info(`Update ${this.pluginName} engine on index "${index}"`);
+    this.context.log.info(
+      `Update ${this.pluginName} engine on index "${index}"`
+    );
 
     await this.engineConfigManager.createCollection(index);
 
@@ -93,52 +129,61 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     return { collections };
   }
 
-  async delete (index: string, request?: KuzzleRequest): Promise<{ collections: string[] }> {
-    if (! await this.exists(index)) {
-      throw new NotFoundError(`${Inflector.upFirst(this.pluginName)} engine on index "${index}" does not exists`);
+  async delete(
+    index: string,
+    request?: KuzzleRequest
+  ): Promise<{ collections: string[] }> {
+    if (!(await this.exists(index))) {
+      throw new NotFoundError(
+        `${Inflector.upFirst(
+          this.pluginName
+        )} engine on index "${index}" does not exists`
+      );
     }
 
-    this.context.log.info(`Delete ${this.pluginName} engine on index "${index}"`);
+    this.context.log.info(
+      `Delete ${this.pluginName} engine on index "${index}"`
+    );
 
     try {
       const { collections } = await this.onDelete(index, request);
 
       return { collections };
-    }
-    finally {
+    } finally {
       await this.sdk.document.delete(
         this.adminIndex,
         this.adminConfigManager.collection,
         this.engineId(index),
-        { refresh: 'wait_for' });
+        { refresh: "wait_for" }
+      );
     }
   }
 
-  async list (group?: string): Promise<Array<EngineContent>> {
+  async list(group?: string): Promise<Array<EngineContent>> {
     const query: JSONObject = {
-      and: [
-        { equals: { type: this.configType } },
-      ],
+      and: [{ equals: { type: this.configType } }],
     };
 
     if (group) {
-      query.and.push({ equals: { 'engine.group': group } });
+      query.and.push({ equals: { "engine.group": group } });
     }
 
     const result = await this.sdk.document.search(
       this.adminIndex,
       this.adminConfigManager.collection,
       { query },
-      { size: 1000, lang: 'koncorde' });
+      { lang: "koncorde", size: 1000 }
+    );
 
-    return result.hits.map(hit => hit._source.engine);
+    return result.hits.map((hit) => hit._source.engine);
   }
 
-  async exists (index: string): Promise<boolean> {
+  async exists(index: string): Promise<boolean> {
     const exists = await this.sdk.document.exists(
       this.adminIndex,
       this.adminConfigManager.collection,
-      this.engineId(index));
+      this.engineId(index)
+    );
 
     return exists;
   }
@@ -146,26 +191,25 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
   /**
    * Creates the engine index if it does not exists
    */
-  private async createEngineIndex (index: string) {
+  private async createEngineIndex(index: string) {
     const mutex = new Mutex(`${this.pluginName}/initIndex/${index}`);
 
     try {
       await mutex.lock();
 
-      if (! await this.sdk.index.exists(index)) {
+      if (!(await this.sdk.index.exists(index))) {
         await this.sdk.index.create(index);
       }
-    }
-    finally {
+    } finally {
       await mutex.unlock();
     }
   }
 
-  protected engineId (index: string): string {
+  protected engineId(index: string): string {
     return `engine-${this.pluginName}--${index}`;
   }
 
-  protected logError (index: string, message: string, error: Error) {
+  protected logError(index: string, message: string, error: Error) {
     this.context.log.error(`[${index}] ${message}: ${error}${error.stack}`);
   }
 }

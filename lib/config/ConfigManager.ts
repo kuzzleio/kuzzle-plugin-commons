@@ -1,5 +1,14 @@
-import _ from 'lodash';
-import { Document, EventHandler, Inflector, JSONObject, KuzzleRequest, PluginContext, PluginImplementationError, Plugin, Backend } from 'kuzzle';
+import _ from "lodash";
+import {
+  Document,
+  EventHandler,
+  Inflector,
+  JSONObject,
+  KuzzleRequest,
+  PluginImplementationError,
+  Plugin,
+  Backend,
+} from "kuzzle";
 
 export type ConfigManagerOptions = {
   /**
@@ -7,7 +16,7 @@ export type ConfigManagerOptions = {
    *
    * @default "config"
    */
-  collection?: string,
+  collection?: string;
 
   /**
    * Function that take the config document content as a parameter and return
@@ -15,7 +24,7 @@ export type ConfigManagerOptions = {
    *
    * By default it will use the "name" property of config content.
    */
-  idGenerator?: (content: JSONObject) => string,
+  idGenerator?: (content: JSONObject) => string;
 
   /**
    * Additional mappings that will be merged
@@ -52,18 +61,17 @@ export class ConfigManager {
    *
    * @default "config"
    */
-  public readonly collection: string = 'config';
+  public readonly collection: string = "config";
 
   /**
    * Base mappings for the config collection
    */
   public baseMappings: JSONObject = {
-    dynamic: 'strict',
+    dynamic: "strict",
     properties: {
-      type: { type: 'keyword' },
-
-      group: { type: 'keyword' },
-    }
+      group: { type: "keyword" },
+      type: { type: "keyword" },
+    },
   };
 
   /**
@@ -71,44 +79,54 @@ export class ConfigManager {
    */
   public baseSettings: JSONObject = {};
 
-  private idGenerator: (content: JSONObject) => string = content => Inflector.kebabCase(content.name);
+  private idGenerator: (content: JSONObject) => string = (content) =>
+    Inflector.kebabCase(content.name);
   private appOrPlugin: Backend | Plugin;
   private configurations = new Map<string, JSONObject>();
 
-  private get sdk () {
+  private get sdk() {
     if (this.isApp) {
-      return this.app.sdk
+      return this.app.sdk;
     }
 
     return this.plugin.context.accessors.sdk;
   }
 
-  private get app () {
-    if (! this.isApp) {
-      throw new PluginImplementationError('ConfigManager was intantiated from a plugin');
+  private get app() {
+    if (!this.isApp) {
+      throw new PluginImplementationError(
+        "ConfigManager was intantiated from a plugin"
+      );
     }
 
     return this.appOrPlugin as Backend;
   }
 
-  private get plugin () {
+  private get plugin() {
     if (this.isApp) {
-      throw new PluginImplementationError('ConfigManager was intantiated from an application');
+      throw new PluginImplementationError(
+        "ConfigManager was intantiated from an application"
+      );
     }
 
     return this.appOrPlugin as Plugin;
   }
 
-  private get isApp () {
+  private get isApp() {
     return this.appOrPlugin instanceof Backend;
   }
 
-  constructor (appOrPlugin: Backend | Plugin, options: ConfigManagerOptions = {}) {
+  constructor(
+    appOrPlugin: Backend | Plugin,
+    options: ConfigManagerOptions = {}
+  ) {
     this.appOrPlugin = appOrPlugin;
 
     this.collection = options.collection || this.collection;
     this.idGenerator = options.idGenerator || this.idGenerator;
-    this.baseMappings = options.mappings ? _.merge({}, this.baseMappings, options.mappings) : this.baseMappings;
+    this.baseMappings = options.mappings
+      ? _.merge({}, this.baseMappings, options.mappings)
+      : this.baseMappings;
     this.baseSettings = options.settings || this.baseSettings;
 
     this.registerPipe();
@@ -126,9 +144,11 @@ export class ConfigManager {
    *    }
    *  });
    */
-  register (type: string, mappings: JSONObject) {
+  register(type: string, mappings: JSONObject) {
     if (this.configurations.has(type)) {
-      throw new PluginImplementationError(`Config for "${type}" already registered.`);
+      throw new PluginImplementationError(
+        `Config for "${type}" already registered.`
+      );
     }
 
     this.configurations.set(type, mappings);
@@ -137,7 +157,11 @@ export class ConfigManager {
   /**
    * Creates the config collection and apply mappings on the specified index.
    */
-  async createCollection (index: string, mappingsOverride: JSONObject = {}, settingsOverride: JSONObject = {}) {
+  async createCollection(
+    index: string,
+    mappingsOverride: JSONObject = {},
+    settingsOverride: JSONObject = {}
+  ) {
     const fullMappings = _.merge({}, this.baseMappings, mappingsOverride);
     const fullSettings = _.merge({}, this.baseSettings, settingsOverride);
 
@@ -151,7 +175,7 @@ export class ConfigManager {
     });
   }
 
-  get mappings () {
+  get mappings() {
     const fullMappings = _.merge({}, this.baseMappings);
 
     for (const [type, mappings] of this.configurations.entries()) {
@@ -168,39 +192,47 @@ export class ConfigManager {
    *
    * Config document must have a "name" property
    */
-  private async generateID (documents: Document[], request: KuzzleRequest) {
+  private async generateID(documents: Document[], request: KuzzleRequest) {
     if (request.getCollection() !== this.collection) {
       return documents;
     }
 
     for (const document of documents) {
       try {
-        if (! this.configurations.has(document._source.type) || document._id) {
+        if (!this.configurations.has(document._source.type) || document._id) {
           continue;
         }
 
         const name = this.idGenerator(document._source[document._source.type]);
         document._id = `${document._source.type}--${name}`;
-      }
-      catch (error) {
-        throw new PluginImplementationError(`Error when generating ID for config document of type "${document._source.type}": ${error}`);
+      } catch (error) {
+        throw new PluginImplementationError(
+          `Error when generating ID for config document of type "${document._source.type}": ${error}`
+        );
       }
     }
 
     return documents;
   }
 
-  private registerPipe () {
+  private registerPipe() {
     if (this.isApp) {
-      this.app.pipe.register('generic:document:beforeWrite', this.generateID.bind(this));
+      this.app.pipe.register(
+        "generic:document:beforeWrite",
+        this.generateID.bind(this)
+      );
 
       return;
     }
 
-    const beforeWritePipes = this.plugin.pipes['generic:document:beforeWrite'] as EventHandler[];
+    const beforeWritePipes = this.plugin.pipes[
+      "generic:document:beforeWrite"
+    ] as EventHandler[];
 
-    if (! _.isArray(this.plugin.pipes['generic:document:beforeWrite'])) {
-      throw new PluginImplementationError('Handler on "generic:document:beforeWrite" must be an array');
+    if (!_.isArray(this.plugin.pipes["generic:document:beforeWrite"])) {
+      throw new PluginImplementationError(
+        'Handler on "generic:document:beforeWrite" must be an array'
+      );
     }
 
     beforeWritePipes.push(this.generateID.bind(this));

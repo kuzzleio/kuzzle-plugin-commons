@@ -3,22 +3,21 @@ import {
   PluginContext,
   KuzzleRequest,
   EmbeddedSDK,
-  JSONObject,
   Plugin,
-} from 'kuzzle';
+} from "kuzzle";
 
-import { AbstractEngine } from './AbstractEngine';
+import { AbstractEngine } from "./AbstractEngine";
 
 export class EngineController<TPlugin extends Plugin> {
   private engine: AbstractEngine<TPlugin>;
   private context: PluginContext;
-  private config: TPlugin['config'];
+  private config: TPlugin["config"];
 
   private pluginName: string;
 
   public definition: ControllerDefinition;
 
-  get sdk (): EmbeddedSDK {
+  get sdk(): EmbeddedSDK {
     return this.context.accessors.sdk;
   }
 
@@ -27,7 +26,7 @@ export class EngineController<TPlugin extends Plugin> {
    * @param plugin Plugin instance
    * @param engine Engine used
    */
-  constructor (
+  constructor(
     pluginName: string,
     plugin: Plugin,
     engine: AbstractEngine<TPlugin>
@@ -41,67 +40,69 @@ export class EngineController<TPlugin extends Plugin> {
       actions: {
         create: {
           handler: this.create.bind(this),
-          http: [{ verb: 'post', path: `${this.pluginName}/engine/:index` }],
-        },
-        update: {
-          handler: this.update.bind(this),
-          http: [{ verb: 'put', path: `${this.pluginName}/engine/:index` }],
+          http: [{ path: `${this.pluginName}/engine/:index`, verb: "post" }],
         },
         delete: {
           handler: this.delete.bind(this),
-          http: [{ verb: 'delete', path: `${this.pluginName}/engine/:index` }],
-        },
-        list: {
-          handler: this.list.bind(this),
-          http: [{ verb: 'get', path: `${this.pluginName}/engines` }],
+          http: [{ path: `${this.pluginName}/engine/:index`, verb: "delete" }],
         },
         exists: {
           handler: this.exists.bind(this),
-          http: [{ verb: 'get', path: `${this.pluginName}/engine/:index/_exists` }],
-        }
+          http: [
+            { path: `${this.pluginName}/engine/:index/_exists`, verb: "get" },
+          ],
+        },
+        list: {
+          handler: this.list.bind(this),
+          http: [{ path: `${this.pluginName}/engines`, verb: "get" }],
+        },
+        update: {
+          handler: this.update.bind(this),
+          http: [{ path: `${this.pluginName}/engine/:index`, verb: "put" }],
+        },
       },
     };
 
-    if (! plugin.api) {
+    if (!plugin.api) {
       plugin.api = {};
     }
 
     plugin.api[`${this.pluginName}/engine`] = this.definition;
   }
 
-  async create (request: KuzzleRequest) {
+  async create(request: KuzzleRequest) {
     const index = request.getIndex();
-    const group = request.getString('group', 'commons');
+    const group = request.getString("group", "commons");
 
     const { collections } = await this.engine.create(index, group, request);
 
-    return { index, collections };
+    return { collections, index };
   }
 
-  async update (request: KuzzleRequest) {
+  async update(request: KuzzleRequest) {
     const index = request.getIndex();
-    const group = request.getString('group', 'commons');
+    const group = request.getString("group", "commons");
 
     const { collections } = await this.engine.update(index, group, request);
 
-    return { index, collections };
+    return { collections, index };
   }
 
-  async delete (request: KuzzleRequest) {
+  async delete(request: KuzzleRequest) {
     const index = request.getIndex();
 
     const { collections } = await this.engine.delete(index, request);
 
-    return { index, collections };
+    return { collections, index };
   }
 
-  async list () {
+  async list() {
     const engines = await this.engine.list();
 
     return { engines };
   }
 
-  async exists (request: KuzzleRequest) {
+  async exists(request: KuzzleRequest) {
     const index = request.getIndex();
 
     const exists = await this.engine.exists(index);
