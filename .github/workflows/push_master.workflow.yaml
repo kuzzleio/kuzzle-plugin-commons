@@ -14,6 +14,7 @@ jobs:
   npm-deploy:
     name: Publish Package to NPM.js
     runs-on: ubuntu-22.04
+    needs: [tests_lint]
     steps:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
