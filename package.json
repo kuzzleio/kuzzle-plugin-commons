@@ -1,6 +1,6 @@
 {
   "name": "kuzzle-plugin-commons",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Common classes for developping Kuzzle plugins",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "license": "Apache 2",

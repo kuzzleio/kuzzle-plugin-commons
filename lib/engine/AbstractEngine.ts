@@ -51,7 +51,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     this.configType = `engine-${this.pluginName}`;
   }
 
-  async init(): Promise<any> {
+  async init(...args: unknown[]): Promise<any> {
     // Can be used to inject other services into the engine
   }
   protected abstract onCreate(
