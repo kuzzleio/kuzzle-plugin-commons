@@ -18,10 +18,18 @@
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.6",
+    "@commitlint/config-conventional": "^17.6.6",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/release-notes-generator": "^11.0.1",
     "@types/node": "^18.15.11",
     "eslint-plugin-kuzzle": "^0.0.6",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "semantic-release-config-kuzzle": "^1.0.0",
+    "semantic-release-slack-bot": "^4.0.2"
   },
   "peerDependencies": {
     "kuzzle": "^2.14.0"
