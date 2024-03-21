@@ -1,8 +1,9 @@
-export * from './lib/engine';
+export * from "./lib/engine";
 
-export * from './lib/synchronizer';
+export * from "./lib/synchronizer";
 
-export * from './lib/config';
+export * from "./lib/config";
 
-export * from './lib/crud';
+export * from "./lib/crud";
 
+export * from "./lib/utils";
