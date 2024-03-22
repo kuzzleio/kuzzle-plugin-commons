@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.1.0...v1.2.0) (2024-03-22)
+
+
+### Features
+
+* **ask:** import typed ask / onAsk from device-manager ([c70b690](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/c70b690d0b76511075db49c84015b7cebbc4d5ed))
+
 # [1.1.0](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.0.8...v1.1.0) (2023-08-09)
 
 
