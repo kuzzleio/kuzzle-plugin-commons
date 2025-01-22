@@ -32,6 +32,9 @@
     "ts-node": "10.9.2",
     "typescript": "5.4.5"
   },
+  "peerDependencies": {
+    "kuzzle": ">=2.14.0"
+  },
   "files": [
     "dist/*"
   ]
