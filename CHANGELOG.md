@@ -1,3 +1,17 @@
+## [1.3.0](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.2.0...v1.3.0) (2025-01-22)
+
+
+### Features
+
+* update deps ([ef938a8](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/ef938a8512ae78849c0686e689ca4b9feae5cf9c))
+
+
+### Bug Fixes
+
+* peerDeps ([35d807e](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/35d807e7c47c4bdf00c811d23a4678c8cbb7a11f))
+* release process ([e94948c](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/e94948c851ac971aaf3716a6b965a2f35f3373f7))
+* remove uneeded deps ([2ad4a7f](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/2ad4a7f67a10b10708dab169bb741db9cd6508af))
+
 ## [1.3.0-beta.1](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.2.0...v1.3.0-beta.1) (2025-01-22)
 
 
