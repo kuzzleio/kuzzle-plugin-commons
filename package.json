@@ -32,7 +32,7 @@
     "typescript": "5.4.5"
   },
   "peerDependencies": {
-    "kuzzle": ">=2.14.0"
+    "kuzzle": ">=2.55.0"
   },
   "files": [
     "dist/*"
