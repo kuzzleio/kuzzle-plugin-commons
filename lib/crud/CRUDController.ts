@@ -45,7 +45,7 @@ export class CRUDController {
       this.collection,
       asset,
       id,
-      { ...request.input.args }
+      { ...request.input.args },
     );
   }
 
@@ -62,7 +62,7 @@ export class CRUDController {
       index,
       this.collection,
       id,
-      { ...request.input.args }
+      { ...request.input.args },
     );
   }
 
@@ -102,7 +102,7 @@ export class CRUDController {
       this.collection,
       id,
       body,
-      { ...request.input.args }
+      { ...request.input.args },
     );
   }
 }
