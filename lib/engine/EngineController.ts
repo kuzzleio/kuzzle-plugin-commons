@@ -29,7 +29,7 @@ export class EngineController<TPlugin extends Plugin> {
   constructor(
     pluginName: string,
     plugin: Plugin,
-    engine: AbstractEngine<TPlugin>
+    engine: AbstractEngine<TPlugin>,
   ) {
     this.pluginName = pluginName;
     this.config = plugin.config;
