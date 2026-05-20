@@ -1,3 +1,9 @@
+## [1.3.1-beta.9](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.8...v1.3.1-beta.9) (2026-05-20)
+
+### Bug Fixes
+
+* **release:** explicit semantic-release dep ([b73bcec](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/b73bcec15e174afdc4768c4c34d49d0bde8414fd))
+
 ## [1.3.1-beta.8](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.7...v1.3.1-beta.8) (2026-05-20)
 
 ### Bug Fixes
