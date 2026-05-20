@@ -39,7 +39,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     plugin: Plugin,
     adminIndex: string,
     adminConfigManager: ConfigManager,
-    engineConfigManager: ConfigManager
+    engineConfigManager: ConfigManager,
   ) {
     this.pluginName = pluginName;
     this.config = plugin.config;
@@ -51,39 +51,39 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     this.configType = `engine-${this.pluginName}`;
   }
 
-  async init(...args: unknown[]): Promise<any> {
+  async init(): Promise<any> {
     // Can be used to inject other services into the engine
   }
   protected abstract onCreate(
     index: string,
     group: string,
-    request?: KuzzleRequest
+    request?: KuzzleRequest,
   ): Promise<{ collections: string[] }>;
   protected abstract onUpdate(
     index: string,
     group: string,
-    request?: KuzzleRequest
+    request?: KuzzleRequest,
   ): Promise<{ collections: string[] }>;
   protected abstract onDelete(
     index: string,
-    request?: KuzzleRequest
+    request?: KuzzleRequest,
   ): Promise<{ collections: string[] }>;
 
   async create(
     index: string,
     group = "commons",
-    request?: KuzzleRequest
+    request?: KuzzleRequest,
   ): Promise<{ collections: string[] }> {
     if (await this.exists(index)) {
       throw new BadRequestError(
         `${Inflector.upFirst(
-          this.pluginName
-        )} engine on index "${index}" already exists`
+          this.pluginName,
+        )} engine on index "${index}" already exists`,
       );
     }
 
     this.context.log.info(
-      `Create ${this.pluginName} engine on index "${index}"`
+      `Create ${this.pluginName} engine on index "${index}"`,
     );
 
     await this.createEngineIndex(index);
@@ -99,7 +99,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
         type: this.configType,
       },
       this.engineId(index),
-      { refresh: "wait_for" }
+      { refresh: "wait_for" },
     );
 
     return { collections };
@@ -108,18 +108,18 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
   async update(
     index: string,
     group = "commons",
-    request?: KuzzleRequest
+    request?: KuzzleRequest,
   ): Promise<{ collections: string[] }> {
     if (!(await this.exists(index))) {
       throw new NotFoundError(
         `${Inflector.upFirst(
-          this.pluginName
-        )} engine on index "${index}" does not exists`
+          this.pluginName,
+        )} engine on index "${index}" does not exists`,
       );
     }
 
     this.context.log.info(
-      `Update ${this.pluginName} engine on index "${index}"`
+      `Update ${this.pluginName} engine on index "${index}"`,
     );
 
     await this.engineConfigManager.createCollection(index);
@@ -131,18 +131,18 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
 
   async delete(
     index: string,
-    request?: KuzzleRequest
+    request?: KuzzleRequest,
   ): Promise<{ collections: string[] }> {
     if (!(await this.exists(index))) {
       throw new NotFoundError(
         `${Inflector.upFirst(
-          this.pluginName
-        )} engine on index "${index}" does not exists`
+          this.pluginName,
+        )} engine on index "${index}" does not exists`,
       );
     }
 
     this.context.log.info(
-      `Delete ${this.pluginName} engine on index "${index}"`
+      `Delete ${this.pluginName} engine on index "${index}"`,
     );
 
     try {
@@ -154,7 +154,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
         this.adminIndex,
         this.adminConfigManager.collection,
         this.engineId(index),
-        { refresh: "wait_for" }
+        { refresh: "wait_for" },
       );
     }
   }
@@ -172,7 +172,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
       this.adminIndex,
       this.adminConfigManager.collection,
       { query },
-      { lang: "koncorde", size: 1000 }
+      { lang: "koncorde", size: 1000 },
     );
 
     return result.hits.map((hit) => hit._source.engine);
@@ -182,7 +182,7 @@ export abstract class AbstractEngine<TPlugin extends Plugin> {
     const exists = await this.sdk.document.exists(
       this.adminIndex,
       this.adminConfigManager.collection,
-      this.engineId(index)
+      this.engineId(index),
     );
 
     return exists;
