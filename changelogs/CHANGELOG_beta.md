@@ -1,3 +1,9 @@
+## [1.3.1-beta.5](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.4...v1.3.1-beta.5) (2026-05-20)
+
+### Bug Fixes
+
+* **pkg:** fix package json ([f8b73d6](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/f8b73d6012649cd015a145449c249a608ef248a7))
+
 ## [1.3.1-beta.4](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.3...v1.3.1-beta.4) (2026-05-20)
 
 ### Bug Fixes
