@@ -95,7 +95,7 @@ export class ConfigManager {
   private get app() {
     if (!this.isApp) {
       throw new PluginImplementationError(
-        "ConfigManager was intantiated from a plugin"
+        "ConfigManager was intantiated from a plugin",
       );
     }
 
@@ -105,7 +105,7 @@ export class ConfigManager {
   private get plugin() {
     if (this.isApp) {
       throw new PluginImplementationError(
-        "ConfigManager was intantiated from an application"
+        "ConfigManager was intantiated from an application",
       );
     }
 
@@ -118,7 +118,7 @@ export class ConfigManager {
 
   constructor(
     appOrPlugin: Backend | Plugin,
-    options: ConfigManagerOptions = {}
+    options: ConfigManagerOptions = {},
   ) {
     this.appOrPlugin = appOrPlugin;
 
@@ -147,7 +147,7 @@ export class ConfigManager {
   register(type: string, mappings: JSONObject) {
     if (this.configurations.has(type)) {
       throw new PluginImplementationError(
-        `Config for "${type}" already registered.`
+        `Config for "${type}" already registered.`,
       );
     }
 
@@ -160,7 +160,7 @@ export class ConfigManager {
   async createCollection(
     index: string,
     mappingsOverride: JSONObject = {},
-    settingsOverride: JSONObject = {}
+    settingsOverride: JSONObject = {},
   ) {
     const fullMappings = _.merge({}, this.baseMappings, mappingsOverride);
     const fullSettings = _.merge({}, this.baseSettings, settingsOverride);
@@ -207,7 +207,7 @@ export class ConfigManager {
         document._id = `${document._source.type}--${name}`;
       } catch (error) {
         throw new PluginImplementationError(
-          `Error when generating ID for config document of type "${document._source.type}": ${error}`
+          `Error when generating ID for config document of type "${document._source.type}": ${error}`,
         );
       }
     }
@@ -219,7 +219,7 @@ export class ConfigManager {
     if (this.isApp) {
       this.app.pipe.register(
         "generic:document:beforeWrite",
-        this.generateID.bind(this)
+        this.generateID.bind(this),
       );
 
       return;
@@ -231,7 +231,7 @@ export class ConfigManager {
 
     if (!_.isArray(this.plugin.pipes["generic:document:beforeWrite"])) {
       throw new PluginImplementationError(
-        'Handler on "generic:document:beforeWrite" must be an array'
+        'Handler on "generic:document:beforeWrite" must be an array',
       );
     }
 

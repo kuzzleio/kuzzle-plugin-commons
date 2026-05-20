@@ -9,7 +9,7 @@ import { Backend, JSONObject, KuzzleRequest } from "kuzzle";
  */
 export abstract class CollectionSynchronizer<
   SrcDoc extends { _id: string; _source: JSONObject },
-  DstDocContent
+  DstDocContent,
 > {
   protected app: Backend;
 
@@ -20,7 +20,7 @@ export abstract class CollectionSynchronizer<
   abstract convertId(srcDocument: SrcDoc, request?: KuzzleRequest): string;
   abstract convertBody(
     srcDocument: SrcDoc,
-    request?: KuzzleRequest
+    request?: KuzzleRequest,
   ): Promise<DstDocContent>;
 
   constructor(app: Backend, srcCollection: string, dstCollection: string) {
@@ -30,17 +30,17 @@ export abstract class CollectionSynchronizer<
 
     this.app.pipe.register(
       "generic:document:afterWrite",
-      (documents, request) => this.pipeAfterWrite(documents, request)
+      (documents, request) => this.pipeAfterWrite(documents, request),
     );
 
     this.app.pipe.register(
       "generic:document:afterUpdate",
-      (documents, request) => this.pipeAfterUpdate(documents, request)
+      (documents, request) => this.pipeAfterUpdate(documents, request),
     );
 
     this.app.pipe.register(
       "generic:document:beforeDelete",
-      (documents, request) => this.pipeBeforeDelete(documents, request)
+      (documents, request) => this.pipeBeforeDelete(documents, request),
     );
   }
 
@@ -58,7 +58,7 @@ export abstract class CollectionSynchronizer<
 
   async afterWriteDocuments(
     index: string,
-    documents: Array<{ _id: string; body: DstDocContent }>
+    documents: Array<{ _id: string; body: DstDocContent }>,
   ) {}
 
   async afterDeleteDocuments(index: string, ids: string[]) {}
@@ -108,7 +108,7 @@ export abstract class CollectionSynchronizer<
       await this.app.sdk.document.mDelete(
         request.getIndex(),
         this.dstCollection,
-        ids
+        ids,
       );
 
       await this.afterDeleteDocuments(request.getIndex(), ids);
@@ -119,12 +119,12 @@ export abstract class CollectionSynchronizer<
 
   private async getEntireDocuments(
     request: KuzzleRequest,
-    documents: SrcDoc[]
+    documents: SrcDoc[],
   ): Promise<SrcDoc[]> {
     const { successes } = await this.app.sdk.document.mGet(
       request.getIndex(),
       this.srcCollection,
-      documents.map(({ _id }) => _id)
+      documents.map(({ _id }) => _id),
     );
 
     return successes as SrcDoc[];
@@ -133,7 +133,7 @@ export abstract class CollectionSynchronizer<
   private async writeDocuments(
     request: KuzzleRequest,
     srcDocuments: SrcDoc[],
-    action: "create" | "update"
+    action: "create" | "update",
   ) {
     const now = Date.now();
 
@@ -160,14 +160,14 @@ export abstract class CollectionSynchronizer<
             body,
           };
         });
-      })
+      }),
     );
 
     await this.app.sdk.bulk.mWrite(
       request.getIndex(),
       this.dstCollection,
       dstDocuments,
-      { notify: true, strict: true }
+      { notify: true, strict: true },
     );
 
     await this.afterWriteDocuments(request.getIndex(), dstDocuments);
