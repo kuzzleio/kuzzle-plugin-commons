@@ -1,3 +1,9 @@
+## [1.3.1-beta.6](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.5...v1.3.1-beta.6) (2026-05-20)
+
+### Bug Fixes
+
+* **pkg:** pin npm version ([0202c07](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/0202c07a702a4edc1a78f9351410dd40e70338fc))
+
 ## [1.3.1-beta.5](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.4...v1.3.1-beta.5) (2026-05-20)
 
 ### Bug Fixes
