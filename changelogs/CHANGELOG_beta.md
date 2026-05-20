@@ -1,3 +1,9 @@
+## [1.3.1-beta.2](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.1...v1.3.1-beta.2) (2026-05-20)
+
+### Bug Fixes
+
+* release process 2 ([ead8d8f](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/ead8d8f340062b431a4241ef196f7f41689105b2))
+
 ## [1.3.1-beta.1](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.0...v1.3.1-beta.1) (2026-05-20)
 
 ### Bug Fixes
