@@ -6,7 +6,7 @@
   "license": "Apache 2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kuzzleio/kuzzle-plugin-commons"
+    "url": "git+https://github.com/kuzzleio/kuzzle-plugin-commons.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
