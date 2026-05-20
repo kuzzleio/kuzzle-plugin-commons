@@ -1,3 +1,9 @@
+## [1.3.1-beta.3](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.2...v1.3.1-beta.3) (2026-05-20)
+
+### Bug Fixes
+
+* **release:** add github token ([da9d0f7](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/da9d0f7e812e74229a83a5e0c1ebee3d87a34b31))
+
 ## [1.3.1-beta.2](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.1...v1.3.1-beta.2) (2026-05-20)
 
 ### Bug Fixes
