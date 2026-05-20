@@ -1,3 +1,9 @@
+## [1.3.1-beta.8](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.7...v1.3.1-beta.8) (2026-05-20)
+
+### Bug Fixes
+
+* **releasew:** use workflow from js sdk ([d4c5991](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/d4c5991ac277744692c64ae8905ad4be4b12d75c))
+
 ## [1.3.1-beta.7](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.6...v1.3.1-beta.7) (2026-05-20)
 
 ### Bug Fixes
