@@ -1,3 +1,10 @@
+## [1.3.1-beta.7](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.6...v1.3.1-beta.7) (2026-05-20)
+
+### Bug Fixes
+
+* **deps:** bump kuzzle to 2.55.0 ([fad29e1](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/fad29e198abcbb8356688c929f97f64c98907fe4))
+* **release:** update node ([262aaf0](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/262aaf0f4c68b8b8219b7b8cb1427487b27de7d6))
+
 ## [1.3.1-beta.6](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.5...v1.3.1-beta.6) (2026-05-20)
 
 ### Bug Fixes
