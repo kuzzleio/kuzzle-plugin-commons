@@ -1,3 +1,9 @@
+## [1.3.1-beta.4](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.3...v1.3.1-beta.4) (2026-05-20)
+
+### Bug Fixes
+
+* **release:** explicit npm registry url ([d38ce75](https://github.com/kuzzleio/kuzzle-plugin-commons/commit/d38ce7550d303535f8a807e21bcd404e24ff527e))
+
 ## [1.3.1-beta.3](https://github.com/kuzzleio/kuzzle-plugin-commons/compare/v1.3.1-beta.2...v1.3.1-beta.3) (2026-05-20)
 
 ### Bug Fixes
